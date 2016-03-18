@@ -14,38 +14,37 @@
 </script>
     <div class="container">
         <div class="col-sm-offset-2 col-sm-8">
+           
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                       Cadastro de Órgãos/Secretarias
-                       <a href="orgaos/create" class="pull-right" ><i class="fa fa-fw fa-plus"></i>Adicionar</a>
+                       Cadastro de Unidades
+                       <a href="unidades/create" class="pull-right" ><i class="fa fa-fw fa-plus"></i>Adicionar</a>
                     </div>
                     <div class="panel-body">
-                    @if (count($orgaos) > 0)
-                        <table class="table table-striped orgao-table">
+                         @if (count($unidades) > 0)
+                        <table class="table table-striped unidade-table">
                             <thead>
                                 <th>Nome</th>
                                 <th>Sigla</th>
-                                <th>Ativo</th>
                                 <th>&nbsp;</th>
                                 <th>&nbsp;</th>
                             </thead>
                             <tbody>
-                                @foreach ($orgaos as $orgao)
+                                @foreach ($unidades as $unidade)
                                     <tr>
-                                        <td class="table-text"><div>{{ $orgao->nome }}</div></td>
-                                        <td class="table-text"><div>{{ $orgao->sigla }}</div></td>
-                                        <td class="table-text"><div>{{ $orgao->active?'Sim':'Não' }}</div></td>
+                                        <td class="table-text"><div>{{ $unidade->nome }}</div></td>
+                                        <td class="table-text"><div>{{ $unidade->sigla }}</div></td>
 
                                         <!-- Task Delete Button -->
                                         <td>
-                                            <a class="btn btn-small btn-info pull-left " href="{{ route('orgaos.edit', $orgao->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
+                                            <a class="btn btn-small btn-info pull-left " href="{{ route('unidades.edit', $unidade->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
-                                            <form action="/orgaos/{{ $orgao->id }}" method="POST" class="pull-left" >
+                                            <form action="/unidades/{{ $unidade->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
 
-                                                <button type="submit" id="delete-orgao-{{ $orgao->id }}" class="btn btn-danger btn-delete">
+                                                <button type="submit" id="delete-unidade-{{ $unidade->id }}" class="btn btn-danger btn-delete">
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
                                                 
@@ -55,12 +54,11 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
-                        <div>Não há registros</div>
-                    @endif
-                    </div>
+                         @else
+                         <div>Não há unidades cadastradas</div>
+                         @endif
                 </div>
-
+            
         </div>
     </div>
 @endsection

@@ -6,8 +6,8 @@
         <div class="col-sm-offset-2 col-sm-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Novo Órgão/Secretaria
-                    <a href="/orgaos" class="pull-right" ><i class="fa fa-angle-double-left"></i></i> Voltar</a>
+                    Novo Tipo de Equipamento
+                    <a href="/tipo_equipamentos" class="pull-right" ><i class="fa fa-angle-double-left"></i></i> Voltar</a>
                 </div>
 
                 <div class="panel-body">
@@ -15,28 +15,28 @@
                     @include('common.errors')
 
                     <!-- New Task Form -->
-                    <form action="/orgaos" method="POST" class="form-horizontal">
+                    <form action="/tipo_equipamentos" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
 
                         <!-- Task Name -->
                         <div class="form-group">
-                            <label for="orgao-nome" class="col-sm-3 control-label">Nome</label>
+                            <label for="tipo_equipamento-nome" class="col-sm-3 control-label">Nome</label>
 
                             <div class="col-sm-6">
-                                <input type="text" name="nome" id="orgao-nome" class="form-control" value="{{ old('nome') }}">
+                                <input type="text" name="nome" id="tipo_equipamento-nome" class="form-control" value="{{ old('nome') }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="orgao-sigla" class="col-sm-3 control-label">Sigla</label>
+                            <label for="tipo_equipamento-descricao" class="col-sm-3 control-label">Descrição</label>
 
                             <div class="col-sm-6">
-                                <input type="text" name="sigla" id="orgao-sigla" class="form-control" value="{{ old('sigla') }}">
+                                <textarea name="descricao" id="tipo_equipamento-descricao" class="form-control" >{{ old('descricao') }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="orgao-active" class="col-sm-3 control-label">Ativo</label>
+                            <label for="tipo_equipamento-active" class="col-sm-3 control-label">Ativo</label>
                             <div class="col-sm-2">
-                                {{ Form::select('active', array('1' => 'Sim', '0' => 'Não'), old('active'), array('id'=>'orgao-active', 'class' => 'form-control')) }}
+                                {{ Form::select('active', array('1' => 'Sim', '0' => 'Não'), old('active'), array('id'=>'tipo_equipamento-active', 'class' => 'form-control')) }}
                             </div>
                         </div>
 

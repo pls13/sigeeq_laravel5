@@ -30,6 +30,14 @@ Route::group(['middleware' => ['web']], function () {
 
     //orgao
     Route::resource('orgaos', 'OrgaoController');
+    //unidade
+    Route::resource('unidades', 'UnidadeController');
+    //tipo equipamento
+    Route::resource('tipo_equipamentos', 'TipoEquipamentoController');
+    //local equipamento
+    Route::resource('local_equipamentos', 'LocalEquipamentoController');
+    //equipamento
+    Route::resource('equipamentos', 'EquipamentoController');
 
 });
 

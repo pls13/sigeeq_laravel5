@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Orgao;
+use App\TipoEquipamento;
 use Illuminate\Http\Request;
 
-class OrgaoController extends Controller {
+class TipoEquipamentoController extends Controller {
 
     /**
      * Create a new controller instance.
@@ -23,8 +23,8 @@ class OrgaoController extends Controller {
      */
     public function index() {
         
-        return view('orgaos.index', [
-            'orgaos' => Orgao::orderBy('created_at', 'asc')->get(),
+        return view('tipo_equipamentos.index', [
+            'tipo_equipamentos' => TipoEquipamento::orderBy('created_at', 'asc')->get(),
         ]);
     }
 
@@ -35,7 +35,7 @@ class OrgaoController extends Controller {
      */
     protected function create()
     {
-       return view('orgaos.create');
+       return view('tipo_equipamentos.create');
         
     }
 
@@ -46,21 +46,20 @@ class OrgaoController extends Controller {
      */
     public function store(Request $request) {
           $validator = validator($request->all(), [
-            'nome' => 'required|unique:orgaos|max:150',
-            'sigla' => 'required|max:6|unique:orgaos',
+            'nome' => 'required|unique:tipo_equipamentos|max:150',
             'active' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect('orgaos/create')->withErrors($validator)->withInput();
+            return redirect('tipo_equipamentos/create')->withErrors($validator)->withInput();
         } else {
-            Orgao::create([
+            TipoEquipamento::create([
                 'nome' => $request['nome'],
-                'sigla' => $request['sigla'],
+                'descricao' => $request['descricao'],
                 'active' =>$request['active'],
             ]);
             //Session::flash('message', 'Successfully created!');
-            return redirect('/orgaos');
+            return redirect('/tipo_equipamentos');
         }
 
     }
@@ -83,10 +82,10 @@ class OrgaoController extends Controller {
      */
     public function edit($id)
     {
-        $orgao = Orgao::find($id);
+        $tipoEquipamento= TipoEquipamento::find($id);
 
-        return view('orgaos.edit')
-            ->with('orgao', $orgao);
+        return view('tipo_equipamentos.edit')
+            ->with('tipo_equipamento', $tipoEquipamento);
         
     }
 
@@ -100,18 +99,17 @@ class OrgaoController extends Controller {
         
         $input = $request->all();
         $validator = validator($input , [
-            'nome' => 'required|unique:orgaos,nome,'.$id.'|max:150',
-            'sigla' => 'required|max:6|unique:orgaos,sigla,'.$id,
+            'nome' => 'required|unique:tipo_equipamentos,nome,'.$id.'|max:150',
             'active' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect('orgaos/'.$id.'/edit')->withErrors($validator)->withInput();
+            return redirect('tipo_equipamentos/'.$id.'/edit')->withErrors($validator)->withInput();
         } else {
-            $orgao = Orgao::find($id);
-            $orgao->fill($input)->save();
+            $tipoEquipamento = TipoEquipamento::find($id);
+            $tipoEquipamento->fill($input)->save();
             
-            return redirect('orgaos');
+            return redirect('tipo_equipamentos');
         }
     }
 
@@ -122,12 +120,11 @@ class OrgaoController extends Controller {
      * @return Response
      */
     public function destroy($id) {
-        $orgao = Orgao::find($id);
-        $orgao->delete();
+        $tipoEquipamento = TipoEquipamento::find($id);
+        $tipoEquipamento->delete();
 
         // redirect
-        //Session::flash('message', 'Successfully deleted!');
-        return redirect('orgaos');
+        return redirect('tipo_equipamentos');
     }
 
 }
