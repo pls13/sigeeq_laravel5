@@ -24,12 +24,18 @@
 */
 
 Route::group(['middleware' => ['web']], function () {
+    Route::auth();
+    
+    Route::get('/home', 'HomeController@index');
+    
     Route::get('/', function () {
         return view('welcome');
     });
 
     //orgao
     Route::resource('orgaos', 'OrgaoController');
+    //User
+    Route::resource('users', 'UserController');
     //unidade
     Route::resource('unidades', 'UnidadeController');
     //tipo equipamento
@@ -39,10 +45,4 @@ Route::group(['middleware' => ['web']], function () {
     //equipamento
     Route::resource('equipamentos', 'EquipamentoController');
 
-});
-
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
-
-    Route::get('/home', 'HomeController@index');
 });

@@ -13,12 +13,13 @@ class Unidade extends Model
      *
      * @var array
      */
-    protected $fillable = ['tecnico_id','orgao_id', 'nome', 'sigla', 'rua','numero','bairro','telefone','nome_diretor'];
+    protected $fillable = ['tecnico_id', 'orgao_id', 'nome', 'sigla', 'rua',
+        'numero','bairro','telefone','nome_diretor'];
     
     /**
      * Get the Orgao that owns the unidade.
      */
-    public function user()
+    public function orgao()
     {
         return $this->belongsTo(Orgao::class);
     }

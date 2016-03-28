@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->integer('profile_id')->unsigned();
             $table->string('name', 150);
             $table->string('username', 10)->unique();
             $table->string('email', 150)->unique();
@@ -22,6 +23,9 @@ class CreateUsersTable extends Migration
             $table->boolean('active')->default(TRUE);
             $table->rememberToken();
             $table->timestamps();
+            
+            $table->foreign('profile_id')->references('id')->on('user_profiles');
+
         });
     }
 
@@ -33,5 +37,6 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::drop('users');
+
     }
 }

@@ -24,12 +24,7 @@
                                 {{ Form::select('orgao_id', $orgaos, old('orgao_id'), array('id'=>'unidade-orgao_id', 'class' => 'form-control', 'placeholder'=>'Selecione')) }}
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="unidade-tecnico_id" class="col-sm-3 control-label">Técnico TI</label>
-                            <div class="col-sm-6">
-                                {{ Form::select('tecnico_id', $users, old('tecnico_id'), array('id'=>'unidade-tecnico_id', 'class' => 'form-control', 'placeholder'=>'Selecione')) }}
-                            </div>
-                        </div>
+                        
                         <div class="form-group">
                             <label for="unidade-nome" class="col-sm-3 control-label">Nome</label>
 
@@ -75,7 +70,12 @@
                                 <input type="text" name="nome_diretor" id="unidade-nome_diretor" class="form-control" value="{{ old('nome_diretor') }}">
                             </div>
                         </div>
-                        
+                        <div class="form-group">
+                            <label for="unidade-tecnico_id" class="col-sm-3 control-label">Responsável TI</label>
+                            <div class="col-sm-6">
+                                {{ Form::select('tecnico_id', $users, old('tecnico_id'), array('id'=>'unidade-tecnico_id', 'class' => 'form-control', 'placeholder'=>'Selecione')) }}
+                            </div>
+                        </div>
 
                         <!-- Add Task Button -->
                         <div class="form-group">

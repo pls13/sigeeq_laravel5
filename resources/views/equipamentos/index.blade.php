@@ -24,7 +24,7 @@
                          @if (count($equipamentos) > 0)
                         <table class="table table-striped equipamento-table">
                             <thead>
-                                <th>Patrimonio</th>
+                                <th>Patrimônio</th>
                                 <th>Tipo</th>
                                 <th>Local</th>
                                 <th>Unidade</th>
