@@ -21,6 +21,11 @@ class Unidade extends Model
      */
     public function orgao()
     {
-        return $this->belongsTo(Orgao::class);
+        return $this->hasOne(Orgao::class);
+    }
+    
+    public function tecnico()
+    {
+        return $this->hasOne(User::class, 'tecnico_id');
     }
 }

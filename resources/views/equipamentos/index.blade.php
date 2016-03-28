@@ -36,7 +36,7 @@
                                         <td class="table-text"><div>{{ $equipamento->patrimonio }}</div></td>
                                         <td class="table-text"><div>{{ $equipamento->tipo->nome }}</div></td>
                                         <td class="table-text"><div>{{ $equipamento->local->nome }}</div></td>
-                                        <td class="table-text"><div>{{ $equipamento->unidade->nome }}</div></td>
+                                        <td class="table-text"><div>{{ $equipamento->unidade->sigla }}</div></td>
                                         <td class="table-text"><div>{{ $equipamento->lastUser->name }}</div></td>
 
                                         <!-- Task Delete Button -->

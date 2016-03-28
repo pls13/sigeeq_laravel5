@@ -31,7 +31,7 @@ class User extends Authenticatable
     
     public function unidades()
     {
-        return $this->hasMany(Unidade::class);
+        return $this->hasOne(Unidade::class, 'tecnico_id');
     }
     
 }

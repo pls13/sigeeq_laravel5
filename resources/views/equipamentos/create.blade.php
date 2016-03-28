@@ -17,14 +17,14 @@
                     <!--Form -->
                     <form action="/equipamentos" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
-                        
+                        @if (Auth::user()->profile->name == 'Admin')
                         <div class="form-group">
                             <label for="equipamento-unidade_id" class="col-sm-3 control-label">Unidade</label>
                             <div class="col-sm-6">
                                 {{ Form::select('unidade_id', $unidades, old('unidade_id'), array('id'=>'equipamento-unidade_id', 'class' => 'form-control', 'placeholder'=>'Selecione')) }}
                             </div>
                         </div>
-                        
+                        @endif
                         <div class="form-group">
                             <label for="equipamento-local_id" class="col-sm-3 control-label">Local</label>
                             <div class="col-sm-6">

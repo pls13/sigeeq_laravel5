@@ -42,4 +42,10 @@ class Equipamento extends Model
     {
         return $this->belongsTo(Unidade::class);
     }
+        
+    
+//    public static function getListaByUserUnidades
+//            retur
+//        
+//    }
 }

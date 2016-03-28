@@ -38,10 +38,13 @@ class UnidadeController extends Controller
      */
     protected function create()
     {
-        $users = User::where('active',true)->lists('name','id');
+        
+        $users = User::leftJoin('unidades','users.id', '=', 'unidades.tecnico_id')
+                ->where('users.active',true)->whereNull('unidades.tecnico_id')
+                ->lists('users.name','users.id');
         $orgaos = Orgao::where('active',true)->lists('nome','id');
         
-       return view('unidades.create',array('orgaos' => $orgaos, 'users' => $users));
+        return view('unidades.create',array('orgaos' => $orgaos, 'users' => $users));
         
     }
 
@@ -60,6 +63,8 @@ class UnidadeController extends Controller
             'bairro'=> 'max:50',
             'telefone'=> 'max:20',
             'nome_diretor'=> 'max:50',
+            'tecnico_id' => 'unique:unidades',
+
         ]);
 
         if ($validator->fails()) {
@@ -124,6 +129,7 @@ class UnidadeController extends Controller
             'bairro'=> 'max:50',
             'telefone'=> 'max:20',
             'nome_diretor'=> 'max:50',
+            'tecnico_id' => 'unique:unidades,tecnico_id,'.$id
         ]);
         if ($validator->fails()) {
             return redirect('unidades/'.$id.'/edit')->withErrors($validator)->withInput();

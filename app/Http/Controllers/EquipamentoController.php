@@ -27,9 +27,17 @@ class EquipamentoController extends Controller
      * @return Response
      */
     public function index() {
-        return view('equipamentos.index', [
-            'equipamentos' => Equipamento::orderBy('created_at', 'asc')->get(),
-        ]);
+        if (Auth::user()->profile->name == 'Admin'){
+            $equipamentos = Equipamento::orderBy('created_at', 'asc')->get();
+        }  else{
+            $equipamentos = Equipamento::join('unidades', 'equipamentos.unidade_id', '=', 'unidades.id')
+            ->join('users', function ($join) {
+                $join->on('users.id', '=', 'unidades.tecnico_id')
+                 ->where('users.id', '=', Auth::user()->id);
+                })->select('equipamentos.*', 'unidades.nome')
+            ->get();
+        }
+        return view('equipamentos.index', ['equipamentos' => $equipamentos]);
     }
 
     /**
@@ -53,11 +61,21 @@ class EquipamentoController extends Controller
      * @return Response
      */
     public function store(Request $request) {
-          $validator = validator($request->all(), [
-            'unidade_id' => 'required','tipo_id' => 'required','local_id' => 'required',
-            'patrimonio' => 'required|max:20|unique:equipamentos',
-            'active'=> 'required'
-        ]);
+                if (Auth::user()->profile->name == 'Admin'){
+                    $arrValidator = [
+                        'unidade_id' => 'required','tipo_id' => 'required','local_id' => 'required',
+                        'patrimonio' => 'required|max:20|unique:equipamentos',
+                        'active'=> 'required'
+                    ];
+                }else{
+                    $arrValidator = [
+                        'tipo_id' => 'required','local_id' => 'required',
+                        'patrimonio' => 'required|max:20|unique:equipamentos',
+                        'active'=> 'required'
+                    ];
+                }
+
+          $validator = validator($request->all(), $arrValidator);
         if ($validator->fails()) {
             return redirect('equipamentos/create')->withErrors($validator)->withInput();
         } else {
