@@ -27,7 +27,8 @@ class UserController extends Controller
     protected function create()
     {
         $profiles = UserProfile::orderBy('name','ASC')->lists('name','id');
-        return view('users.create',array('profiles' => $profiles));
+        $unidades = Unidade::whereNull( 'tecnico_id')->orderBy('nome','ASC')->lists('nome','id');
+        return view('users.create',['profiles' => $profiles, 'unidades' => $unidades]);
     }
 
     /**
@@ -38,23 +39,36 @@ class UserController extends Controller
     public function store(Request $request) {
           $validator = validator($request->all(), [
             'name' => 'required|max:150',
-            'username' => 'required|max:10|unique:users',
+            'username' => 'regex:/(^[A-Za-z0-9]+$)+/|required|max:10|unique:users',
             'email' => 'required|max:150|unique:users',
             'profile_id' => 'required',
             'active'=> 'required',
         ]);
+        if (!$validator->fails() && $request['unidade_id'] != '') {
+            $existe = Unidade::where('id','=',$request['unidade_id'])->whereNotNull('tecnico_id')->exists();
+            if($existe){
+                $validator->after(function($validator) {
+                    $validator->errors()->add('unidade_id', 'A unidade já está vinculada a outro usuário');
+                });
+            }
+        }
 
         if ($validator->fails()) {
             return redirect('users/create')->withErrors($validator)->withInput();
         } else {
-            User::create([
+           $insertID = User::create([
                 'name' => $request['name'],
                 'username' => $request['username'],
                 'email' => $request['email'],
                 'profile_id' => $request['profile_id'],
                 'active'=> $request['active'],
                 'password' => bcrypt($request['username'].'-sigeeq'),
-            ]);
+            ])->id;
+           if($request['unidade_id'] != ''){
+                $unidade = Unidade::find($request['unidade_id']);
+                $unidade->tecnico_id = $insertID;
+                $unidade->save();
+           }
             //Session::flash('message', 'Successfully created!');
             return redirect('/users');
         }
@@ -80,8 +94,13 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+        $unidade_id = '';
+        if($user->unidade instanceof Unidade){
+            $unidade_id = $user->unidade->id;
+        }
         $profiles = UserProfile::orderBy('name','ASC')->lists('name','id');
-        return view('users.edit', array('user'=>$user,'profiles' =>$profiles));
+        $unidades = Unidade::whereNull( 'tecnico_id')->orWhere('tecnico_id','=',$user->id)->orderBy('nome','ASC')->lists('nome','id');
+        return view('users.edit', array('user'=>$user,'profiles' =>$profiles, 'unidades'=> $unidades,'unidade_id'=>$unidade_id));
     }
     
 
@@ -100,10 +119,33 @@ class UserController extends Controller
             'profile_id' => 'required',
             'active'=> 'required',
         ]);
+        
+        if (!$validator->fails()){
+            if($input['unidade_id'] != ''){
+                $existe = Unidade::where('id','=',$input['unidade_id'])->where('tecnico_id','<>',$id)->whereNotNull('tecnico_id')->exists();
+                if($existe){
+                    $validator->after(function($validator) {
+                        $validator->errors()->add('unidade_id', 'A unidade está vinculada a outro usuário');
+                    });
+                }
+            }else{
+                $input['unidade_id'] = NULL;
+            }
+        }
+        
         if ($validator->fails()) {
             return redirect('users/'.$id.'/edit')->withErrors($validator)->withInput();
         } else {
             $user = User::findOrFail($id);
+            if($user->unidade instanceof Unidade){
+                if($input['unidade_id'] != $user->unidade->id){
+                    $unidade = Unidade::find($user->unidade->id);
+                    $unidade->tecnico_id = NULL;
+                    $unidade->save();
+                }
+           }
+           
+           
             $user->fill($input);
             $user->save();
             

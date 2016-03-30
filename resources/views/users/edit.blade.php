@@ -47,7 +47,13 @@
                         @endif
                     </div>
                 </div>
-      
+                <div class="form-group">
+                    <label for="user-unidade_id" class="col-sm-3 control-label">Unidade alocado</label>
+                    <div class="col-sm-6">
+                        {{ Form::select('unidade_id', $unidades, $unidade_id, array('id'=>'user-unidade_id', 'class' => 'form-control',  'placeholder'=>'Nenhuma')) }}
+                    </div>
+                </div>     
+                
                 <div class="form-group">
                     <label for="user-profile_id" class="col-sm-3 control-label">Perfil</label>
                     <div class="col-sm-2">
