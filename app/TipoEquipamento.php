@@ -19,6 +19,6 @@ class TipoEquipamento extends Model
     
     public function equipamentos()
     {
-        return $this->hasMany(Equipamento::class);
+        return $this->hasMany('App\Equipamento');
     }
 }

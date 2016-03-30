@@ -12,40 +12,36 @@ class Equipamento extends Model
      *
      * @var array
      */
-    protected $fillable = ['unidade_id', 'tipo_id', 'local_id', 'last_user_id', 'patrimonio', 'observacao', 'active'];
+    protected $fillable = ['unidade_id', 'tipo_id', 'local_id', 
+        'last_user_id', 'patrimonio', 'observacao', 'active'];
     
     /**
      * Get the  user that perform last update
      */
     public function lastUser()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('App\User','last_user_id');
     }
     /**
      * Get the  local 
      */
     public function local()
     {
-        return $this->belongsTo(LocalEquipamento::class);
+        return $this->belongsTo('App\LocalEquipamento');
     }
     /**
      * Get the  tipo
      */
     public function tipo()
     {
-        return $this->belongsTo(TipoEquipamento::class);
+        return $this->belongsTo('App\TipoEquipamento');
     }
     /**
      * Get the  unidade
      */
     public function unidade()
     {
-        return $this->belongsTo(Unidade::class);
+        return $this->belongsTo('App\Unidade');
     }
-        
-    
-//    public static function getListaByUserUnidades
-//            retur
-//        
-//    }
+
 }

@@ -17,7 +17,7 @@
            
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                       Cadastro de Equipamentos
+                       Cadastro de Equipamentos - {{ $unidade }}
                        <a href="equipamentos/create" class="pull-right" ><i class="fa fa-fw fa-plus"></i>Adicionar</a>
                     </div>
                     <div class="panel-body">

@@ -27,17 +27,16 @@ class EquipamentoController extends Controller
      * @return Response
      */
     public function index() {
+        $equipamentos = $unidade = '';
         if (Auth::user()->profile->name == 'Admin'){
             $equipamentos = Equipamento::orderBy('created_at', 'asc')->get();
-        }  else{
-            $equipamentos = Equipamento::join('unidades', 'equipamentos.unidade_id', '=', 'unidades.id')
-            ->join('users', function ($join) {
-                $join->on('users.id', '=', 'unidades.tecnico_id')
-                 ->where('users.id', '=', Auth::user()->id);
-                })->select('equipamentos.*', 'unidades.nome')
+             $unidade = 'GERAL';
+        }  elseif(Auth::user()->unidade instanceof Unidade){
+            $equipamentos = Equipamento::where('unidade_id', '=', Auth::user()->unidade->id)
             ->get();
+            $unidade = Auth::user()->unidade->nome;
         }
-        return view('equipamentos.index', ['equipamentos' => $equipamentos]);
+        return view('equipamentos.index', ['equipamentos' => $equipamentos, 'unidade'=> $unidade]);
     }
 
     /**
@@ -47,11 +46,17 @@ class EquipamentoController extends Controller
      */
     protected function create()
     {
-        $locais = LocalEquipamento::where('active',true)->lists('nome','id');
-        $tipos = TipoEquipamento::where('active',true)->lists('nome','id');
-        $unidades = Unidade::orderBy('created_at', 'asc')->lists('nome','id');
-        
-       return view('equipamentos.create',array('unidades' => $unidades,'locais' => $locais, 'tipos' => $tipos));
+        $comboUnidade = ['id'=>'equipamento-unidade_id', 'class' => 'form-control'];
+        if (Auth::user()->profile->name == 'Admin'){
+            $comboUnidade['placeholder'] = 'Selecione';
+            $arrOutput['unidades'] = Unidade::orderBy('created_at', 'asc')->lists('nome','id');
+        }elseif(Auth::user()->unidade instanceof Unidade){
+            $arrOutput['unidades'] = [Auth::user()->unidade->id => Auth::user()->unidade->nome];
+        }
+        $arrOutput['locais'] = LocalEquipamento::where('active',true)->lists('nome','id');
+        $arrOutput['tipos'] = TipoEquipamento::where('active',true)->lists('nome','id');
+        $arrOutput['property_combo'] = $comboUnidade;
+       return view('equipamentos.create',$arrOutput);
         
     }
 
@@ -61,27 +66,33 @@ class EquipamentoController extends Controller
      * @return Response
      */
     public function store(Request $request) {
-                if (Auth::user()->profile->name == 'Admin'){
-                    $arrValidator = [
-                        'unidade_id' => 'required','tipo_id' => 'required','local_id' => 'required',
+        $user = Auth::user();
+        $valido = FALSE;
+        $unidadeId = NULL;
+        if ($user->profile->name == 'Admin'){
+            $arrValidator['unidade_id'] = 'required';
+            $valido = TRUE;
+            $unidadeId = $request['unidade_id'];
+        }elseif($user->unidade instanceof Unidade){
+            $valido = TRUE;
+            $unidadeId = $user->unidade->id;
+        }
+        $arrValidator = ['tipo_id' => 'required',
+                        'local_id' => 'required',
                         'patrimonio' => 'required|max:20|unique:equipamentos',
-                        'active'=> 'required'
-                    ];
-                }else{
-                    $arrValidator = [
-                        'tipo_id' => 'required','local_id' => 'required',
-                        'patrimonio' => 'required|max:20|unique:equipamentos',
-                        'active'=> 'required'
-                    ];
-                }
-
-          $validator = validator($request->all(), $arrValidator);
+                        'active'=> 'required'];
+        $validator = validator($request->all(), $arrValidator);
+        if(!$valido){
+            $validator->after(function($validator) {
+                $validator->errors()->add('patrimonio', 'Usuário sem permissão');
+            });
+        }
         if ($validator->fails()) {
             return redirect('equipamentos/create')->withErrors($validator)->withInput();
         } else {
-            $user = Auth::user();
+            
             Equipamento::create([
-                'unidade_id' => $request['unidade_id'],
+                'unidade_id' => $unidadeId,
                 'tipo_id' => $request['tipo_id'],
                 'local_id' => $request['local_id'],
                 'last_user_id' => $user->id,

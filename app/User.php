@@ -20,18 +20,16 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token',];
     
     public function profile()
     {
-        return $this->belongsTo(UserProfile::class);
+        return $this->belongsTo('App\UserProfile');
     }
     
-    public function unidades()
+    public function unidade()
     {
-        return $this->hasOne(Unidade::class, 'tecnico_id');
+        return $this->hasOne('App\Unidade', 'tecnico_id');
     }
     
 }

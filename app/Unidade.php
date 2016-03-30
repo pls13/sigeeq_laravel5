@@ -16,16 +16,19 @@ class Unidade extends Model
     protected $fillable = ['tecnico_id', 'orgao_id', 'nome', 'sigla', 'rua',
         'numero','bairro','telefone','nome_diretor'];
     
-    /**
-     * Get the Orgao that owns the unidade.
-     */
+  
     public function orgao()
     {
-        return $this->hasOne(Orgao::class);
+        return $this->belongsTo('App\Orgao');
     }
     
     public function tecnico()
     {
-        return $this->hasOne(User::class, 'tecnico_id');
+        return $this->belongsTo('App\User', 'tecnico_id');
+    }
+    
+    public function equipamentos()
+    {
+        return $this->hasMany('App\Equipamento');
     }
 }

@@ -19,6 +19,6 @@ class Orgao extends Model
     
     public function unidades()
     {
-        return $this->hasMany(Unidade::class);
+        return $this->hasMany('App\Unidade');
     }
 }
