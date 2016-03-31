@@ -10,6 +10,9 @@
                  return false;
              }
         });
+        $('.no-delete-user').on('click', function() {
+             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        });
 });
 </script>
     <div class="container">
@@ -36,6 +39,7 @@
                                         <td class="table-text"><div>{{ $user->name }}</div></td>
                                         <td class="table-text"><div>{{ $user->email }}</div></td>
                                         <td class="table-text"><div>{{ $user->profile->name }}</div></td>
+                                        <td class="table-text"><div>{{ (($user->unidade)?$user->unidade->nome:'N/D') }}</div></td>
                                         <td class="table-text"><div>{{ $user->active?'Sim':'Não' }}</div></td>
 
                                         <!-- Task Delete Button -->
@@ -43,15 +47,19 @@
                                             <a class="btn btn-small btn-info pull-left " href="{{ route('users.edit', $user->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
+                                            @if($user->unidade)
+                                            <button type="button" id="no-delete-user-{{ $user->id }}" class="btn btn-danger no-delete-user">
+                                                <i class="fa fa-btn fa-trash"></i>Excluir
+                                            </button>
+                                            @else
                                             <form action="/users/{{ $user->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
-
                                                 <button type="submit" id="delete-user-{{ $user->id }}" class="btn btn-danger btn-delete">
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
-                                                
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

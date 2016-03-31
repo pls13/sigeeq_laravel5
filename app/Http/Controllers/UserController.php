@@ -66,8 +66,10 @@ class UserController extends Controller
             ])->id;
            if($request['unidade_id'] != ''){
                 $unidade = Unidade::find($request['unidade_id']);
-                $unidade->tecnico_id = $insertID;
-                $unidade->save();
+                if($unidade instanceof Unidade){
+                    $unidade->tecnico_id = $insertID;
+                    $unidade->save();
+                }
            }
             //Session::flash('message', 'Successfully created!');
             return redirect('/users');
@@ -114,7 +116,7 @@ class UserController extends Controller
         $input = $request->all();
         $validator = validator($input, [
             'name' => 'required|max:150',
-            'username' => 'required|max:10|unique:users,username,'.$id,
+            'username' => 'regex:/(^[A-Za-z0-9]+$)+/|required|max:10|unique:users,username,'.$id,
             'email' => 'required|max:150|unique:users,email,'.$id,
             'profile_id' => 'required',
             'active'=> 'required',
@@ -137,17 +139,28 @@ class UserController extends Controller
             return redirect('users/'.$id.'/edit')->withErrors($validator)->withInput();
         } else {
             $user = User::findOrFail($id);
+            $user->fill($input);
+            $user->save();
+            $mudouUnidade = FALSE;
             if($user->unidade instanceof Unidade){
                 if($input['unidade_id'] != $user->unidade->id){
+                    $mudouUnidade = TRUE;
                     $unidade = Unidade::find($user->unidade->id);
                     $unidade->tecnico_id = NULL;
                     $unidade->save();
                 }
+           }elseif($input['unidade_id'] != ''){
+               $mudouUnidade = TRUE;
+           }
+           if($mudouUnidade){
+                $unidadeNova = Unidade::find($input['unidade_id']);
+                if($unidadeNova instanceof Unidade){
+                    $unidadeNova->tecnico_id = $id;
+                    $unidadeNova->save();
+                }
            }
            
-           
-            $user->fill($input);
-            $user->save();
+            
             
             return redirect('users');
         }

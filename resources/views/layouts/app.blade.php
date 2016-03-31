@@ -10,12 +10,14 @@
         <!-- Fonts -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
-
+        
         <!-- Styles -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('css/bootstrap-theme.min.css')}}">
+        <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+        
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
         {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+
         <style>
             body {
                 font-family: 'Lato';
@@ -97,8 +99,10 @@
         @yield('content')
 
         <!-- JavaScripts -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+        <script src="{{asset('js/vendor/jquery.js')}}"></script>
+        <script src="{{asset('js/bootstrap.min.js')}}"></script>
         {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>
