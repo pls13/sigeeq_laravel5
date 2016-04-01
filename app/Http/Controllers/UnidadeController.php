@@ -72,7 +72,7 @@ class UnidadeController extends Controller
         } else {
             Unidade::create([
                 'orgao_id' => $request['orgao_id'],
-                'tecnico_id' => empty($request['tecnico_id'])?null:$request['tecnico_id'],
+                'tecnico_id' => empty($request['tecnico_id'])?NULL:$request['tecnico_id'],
                 'nome' => $request['nome'],
                 'sigla' => $request['sigla'],
                 'rua'=> $request['rua'],
@@ -106,7 +106,12 @@ class UnidadeController extends Controller
     public function edit($id)
     {
         $unidade = Unidade::find($id);
-        $users = User::where('active',true)->lists('name','id');
+        $users = User::leftJoin('unidades','users.id', '=', 'unidades.tecnico_id')
+                ->where('users.active',true)->whereNull('unidades.tecnico_id')
+                ->lists('users.name','users.id');
+        if($unidade->tecnico instanceof User){
+            $users[$unidade->tecnico->id] = $unidade->tecnico->name;
+        }
         $orgaos = Orgao::where('active',true)->lists('nome','id');
 
         return view('unidades.edit', array('unidade'=>$unidade,'users' =>$users, 'orgaos' =>$orgaos  ));

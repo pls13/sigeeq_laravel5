@@ -2,16 +2,6 @@
 
 @section('content')
 
-
-<script>
-    $(document).ready(function(){
-        $('.btn-delete').on('click', function() {
-             if(!confirm('Confirma a exclusão?')){
-                 return false;
-             }
-        });
-});
-</script>
     <div class="container">
         <div class="col-sm-offset-2 col-sm-8">
                 <div class="panel panel-default">
@@ -64,3 +54,17 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function(){
+        $('.btn-delete').on('click', function() {
+             if(!confirm('Confirma a exclusão?')){
+                 return false;
+             }
+        });
+        $('.no-delete-user').on('click', function() {
+             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        });
+});
+</script>
+@endpush

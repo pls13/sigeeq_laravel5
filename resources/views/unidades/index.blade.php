@@ -2,16 +2,6 @@
 
 @section('content')
 
-
-<script>
-    $(document).ready(function(){
-        $('.btn-delete').on('click', function() {
-             if(!confirm('Confirma a exclusão?')){
-                 return false;
-             }
-        });
-});
-</script>
     <div class="container">
         <div class="col-sm-offset-2 col-sm-8">
            
@@ -26,6 +16,7 @@
                             <thead>
                                 <th>Nome</th>
                                 <th>Sigla</th>
+                                <th>Responsável TI</th>
                                 <th>&nbsp;</th>
                                 <th>&nbsp;</th>
                             </thead>
@@ -34,6 +25,7 @@
                                     <tr>
                                         <td class="table-text"><div>{{ $unidade->nome }}</div></td>
                                         <td class="table-text"><div>{{ $unidade->sigla }}</div></td>
+                                        <td class="table-text"><div>{{ (($unidade->tecnico instanceof App\User)?$unidade->tecnico->name:'N/D') }}</div></td>
 
                                         <!-- Task Delete Button -->
                                         <td>
@@ -62,3 +54,18 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function(){
+        $('.btn-delete').on('click', function() {
+             if(!confirm('Confirma a exclusão?')){
+                 return false;
+             }
+        });
+        $('.no-delete-user').on('click', function() {
+             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        });
+});
+</script>
+@endpush
