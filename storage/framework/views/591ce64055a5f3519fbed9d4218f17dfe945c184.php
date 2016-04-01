@@ -1,15 +1,5 @@
 <?php $__env->startSection('content'); ?>
 
-
-<script>
-    $(document).ready(function(){
-        $('.btn-delete').on('click', function() {
-             if(!confirm('Confirma a exclusão?')){
-                 return false;
-             }
-        });
-});
-</script>
     <div class="container">
         <div class="col-sm-offset-2 col-sm-8">
            
@@ -67,5 +57,18 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
-
+<?php $__env->startSection('scripts'); ?>
+<script>
+    $(document).ready(function(){
+        $('.btn-delete').on('click', function() {
+             if(!confirm('Confirma a exclusão?')){
+                 return false;
+             }
+        });
+        $('.no-delete-user').on('click', function() {
+             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        });
+});
+</script>
+<?php $__env->appendSection(); ?>
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

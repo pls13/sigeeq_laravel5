@@ -1,15 +1,6 @@
 <?php $__env->startSection('content'); ?>
 
 
-<script>
-    $(document).ready(function(){
-        $('.btn-delete').on('click', function() {
-             if(!confirm('Confirma a exclusão?')){
-                 return false;
-             }
-        });
-});
-</script>
     <div class="container">
         <div class="col-sm-offset-2 col-sm-8">
                 <div class="panel panel-default">
@@ -34,6 +25,7 @@
                                         <td class="table-text"><div><?php echo e($user->name); ?></div></td>
                                         <td class="table-text"><div><?php echo e($user->email); ?></div></td>
                                         <td class="table-text"><div><?php echo e($user->profile->name); ?></div></td>
+                                        <td class="table-text"><div><?php echo e((($user->unidade)?$user->unidade->nome:'N/D')); ?></div></td>
                                         <td class="table-text"><div><?php echo e($user->active?'Sim':'Não'); ?></div></td>
 
                                         <!-- Task Delete Button -->
@@ -41,17 +33,21 @@
                                             <a class="btn btn-small btn-info pull-left " href="<?php echo e(route('users.edit', $user->id)); ?> "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
+                                            <?php if($user->unidade): ?>
+                                            <button type="button" id="no-delete-user-<?php echo e($user->id); ?>" class="btn btn-danger no-delete-user">
+                                                <i class="fa fa-btn fa-trash"></i>Excluir
+                                            </button>
+                                            <?php else: ?>
                                             <form action="/users/<?php echo e($user->id); ?>" method="POST" class="pull-left" >
                                                 <?php echo e(csrf_field()); ?>
 
                                                 <?php echo e(method_field('DELETE')); ?>
 
-
                                                 <button type="submit" id="delete-user-<?php echo e($user->id); ?>" class="btn btn-danger btn-delete">
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
-                                                
                                             </form>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -66,5 +62,19 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+<script>
+    $(document).ready(function(){
+        $('.btn-delete').on('click', function() {
+             if(!confirm('Confirma a exclusão?')){
+                 return false;
+             }
+        });
+        $('.no-delete-user').on('click', function() {
+             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        });
+});
+</script>
+<?php $__env->appendSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
