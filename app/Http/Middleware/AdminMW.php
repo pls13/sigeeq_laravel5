@@ -15,6 +15,13 @@ class AdminMW
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        $user = $request->user();
+        
+        if(($user instanceof App\User) && $user->profile->name == 'Admin'){
+            return $next($request);
+        }else{
+            //return abort(401);
+            throw new \Exception("WE DON'T LIKE ODD REMOTE PORTS");
+        }
     }
 }
