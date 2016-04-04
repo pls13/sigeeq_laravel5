@@ -8,17 +8,19 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                        Cadastro de Equipamentos - {{ $unidade }}
-                       <a href="equipamentos/create" class="pull-right" ><i class="fa fa-fw fa-plus"></i>Adicionar</a>
+                       <a href="equipamentos/create" class="pull-right" id="lnk_adicionar"><i class="fa fa-fw fa-plus"></i>Adicionar</a>
                     </div>
                     <div class="panel-body">
                          @if (count($equipamentos) > 0)
-                        <table class="table table-striped equipamento-table">
+                        <table class="table table-striped equipamento-table" id="data-table">
                             <thead>
                                 <th>Patrimônio</th>
                                 <th>Tipo</th>
                                 <th>Local</th>
                                 <th>Unidade</th>
                                 <th>Última Edição</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
                             </thead>
                             <tbody>
                                 @foreach ($equipamentos as $equipamento)
@@ -59,6 +61,7 @@
 @push('scripts')
 <script>
     $(document).ready(function(){
+        $('#data-table').DataTable({columnDefs: [ { orderable: false, targets: [5,6] } ]});
         $('.btn-delete').on('click', function() {
              if(!confirm('Confirma a exclusão?')){
                  return false;
@@ -67,6 +70,7 @@
         $('.no-delete-user').on('click', function() {
              alert("O usuário possui unidade vinculada e não pode ser excluído");
         });
+        $("#lnk_adicionar").focus();
 });
 </script>
 @endpush

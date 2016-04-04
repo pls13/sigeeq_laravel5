@@ -13,7 +13,7 @@
         
         <!-- Styles -->
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
-        
+        <link href="{{asset('DataTables/datatables.min.css') }}" rel="stylesheet" type="text/css"/>
         <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
         {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
@@ -49,9 +49,9 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        @if (Auth::check() && (Auth::user()->profile->name == 'Admin'
+                        || Auth::user()->unidade instanceof App\Unidade))                        
                         <li><a href="{{ url('/home') }}">Home</a></li>
-                        @if (Auth::user())
-                        
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Cadastro<span class="caret"></span>
@@ -59,27 +59,30 @@
                             <ul class="dropdown-menu" role="menu">
                                 @if (Auth::user()->profile->name == 'Admin')
                                 <li><a href="{{ url('/users') }}">Usuários</a></li>
-                                <li><a href="{{ url('/orgaos') }}">Órgãos</a></li>
+                                <li><a href="{{ url('/orgaos') }}">Órgãos/Secretarias</a></li>
                                 <li><a href="{{ url('/unidades') }}">Unidades</a></li>
                                 @endif
-                                @if (Auth::user()->profile->name == 'Admin'|| Auth::user()->profile->name == 'User')
-                                <li><a href="{{ url('/tipo_equipamentos') }}">Tipo Equipamento</a></li>
-                                <li><a href="{{ url('/local_equipamentos') }}">Local Equipamento</a></li>
-                                <li><a href="{{ url('/equipamentos') }}">Equipamento</a></li>
-                                @endif
+                                <li><a href="{{ url('/equipamentos') }}">Equipamentos</a></li>
+                                <li><a href="{{ url('/tipo_equipamentos') }}">Tipo Equipamentos</a></li>
+                                <li><a href="{{ url('/local_equipamentos') }}">Local Equipamentos</a></li>
                                 
                             </ul>
                         </li>
-                        
+<!--                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Relatórios<span class="caret"></span>
+                            </a>    
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Listagem Geral</a></li>
+                            </ul>
+                        </li>-->
                         @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
-                        @else
+                        @if (Auth::check())
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->username }} <span class="caret"></span>
@@ -102,6 +105,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
         <script src="{{asset('js/vendor/jquery.js')}}"></script>
         <script src="{{asset('js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('DataTables/datatables.min.js')}}" type="text/javascript"></script>
         {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
         @stack('scripts')
 

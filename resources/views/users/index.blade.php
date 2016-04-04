@@ -12,11 +12,11 @@
                     </div>
                     <div class="panel-body">
                     @if (count($users) > 0)
-                        <table class="table table-striped user-table">
+                    <table class="table table-striped user-table" id="data-table">
                             <thead>
                                 <th>Nome</th>
-                                <th>E-Mail</th>
                                 <th>Perfil</th>
+                                <th>Unidade Alocado</th>
                                 <th>Ativo</th>
                                 <th>&nbsp;</th>
                                 <th>&nbsp;</th>
@@ -25,9 +25,8 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td class="table-text"><div>{{ $user->name }}</div></td>
-                                        <td class="table-text"><div>{{ $user->email }}</div></td>
                                         <td class="table-text"><div>{{ $user->profile->name }}</div></td>
-                                        <td class="table-text"><div>{{ (($user->unidade)?$user->unidade->nome:'N/D') }}</div></td>
+                                        <td class="table-text"><div>{{ (($user->unidade)?$user->unidade->sigla:'N/D') }}</div></td>
                                         <td class="table-text"><div>{{ $user->active?'Sim':'Não' }}</div></td>
 
                                         <!-- Task Delete Button -->
@@ -35,11 +34,8 @@
                                             <a class="btn btn-small btn-info pull-left " href="{{ route('users.edit', $user->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
-                                            @if($user->unidade)
-                                            <button type="button" id="no-delete-user-{{ $user->id }}" class="btn btn-danger no-delete-user">
-                                                <i class="fa fa-btn fa-trash"></i>Excluir
-                                            </button>
-                                            @else
+                                            @if($user->canDelete())
+                                            
                                             <form action="/users/{{ $user->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
@@ -47,6 +43,11 @@
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
                                             </form>
+                                            
+                                            @else
+                                             <button type="button" class="btn btn-no-delete">
+                                                    <i class="fa fa-btn fa-trash"></i>Excluir
+                                                </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -65,14 +66,16 @@
 @push('scripts')
 <script>
     $(document).ready(function(){
+        
         $('.btn-delete').on('click', function() {
              if(!confirm('Confirma a exclusão?')){
                  return false;
              }
         });
-        $('.no-delete-user').on('click', function() {
-             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        $('.btn-no-delete').on('click', function() {
+             alert("O usuário já registrou equipamentos e não pode mais ser excluído");
         });
 });
+
 </script>
 @endpush

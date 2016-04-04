@@ -17,6 +17,7 @@ class UnidadeController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
+        $this->middleware('adminMW');
     }
     
     /**
@@ -27,7 +28,8 @@ class UnidadeController extends Controller
     public function index() {
         
         return view('unidades.index', [
-            'unidades' => Unidade::orderBy('created_at', 'asc')->get(),
+            'unidades' => Unidade::orderBy('created_at', 'asc')->
+                with('orgao','tecnico')->get(),
         ]);
     }
 

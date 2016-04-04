@@ -11,11 +11,12 @@ class UserController extends Controller
 {
      public function __construct() {
         $this->middleware('auth');
+        $this->middleware('adminMW');
     }
     
     
     public function index() {
-        $users = User::orderBy('created_at', 'ASC')->get();
+        $users = User::orderBy('created_at', 'ASC')->with('profile')->get();
         return view('users.index', ['users' =>$users ]);
     }
     

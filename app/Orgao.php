@@ -13,6 +13,7 @@ class Orgao extends Model
      */
     protected $fillable = ['nome', 'sigla','active' ];
     
+    private $canDelete = NULL;
     /**
      * Get all of the unidades for the orgao.
      */
@@ -20,5 +21,12 @@ class Orgao extends Model
     public function unidades()
     {
         return $this->hasMany('App\Unidade');
+    }
+        
+    public function canDelete() {
+        if(is_null($this->canDelete)){
+            $this->canDelete = ($this->unidades()->count()==0);
+        }
+        return $this->canDelete;
     }
 }

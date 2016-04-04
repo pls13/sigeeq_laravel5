@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Unidade extends Model
@@ -16,6 +17,7 @@ class Unidade extends Model
     protected $fillable = ['tecnico_id', 'orgao_id', 'nome', 'sigla', 'rua',
         'numero','bairro','telefone','nome_diretor'];
     
+    private $canDelete = NULL;
   
     public function orgao()
     {
@@ -31,4 +33,12 @@ class Unidade extends Model
     {
         return $this->hasMany('App\Equipamento');
     }
+    
+    public function canDelete() {
+        if(is_null($this->canDelete)){
+            $this->canDelete = is_null(DB::table('equipamentos_log')->where('unidade_id','=',$this->id)->first());
+        }
+        return $this->canDelete;
+    }
+    
 }

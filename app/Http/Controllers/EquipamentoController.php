@@ -19,7 +19,6 @@ class EquipamentoController extends Controller
      */
     public function __construct() {
         $this->middleware('auth');
-        $this->middleware('adminMW');
     }
     
     /**
@@ -30,11 +29,12 @@ class EquipamentoController extends Controller
     public function index() {
         $equipamentos = $unidade = '';
         if (Auth::user()->profile->name == 'Admin'){
-            $equipamentos = Equipamento::orderBy('created_at', 'asc')->get();
+            $equipamentos = Equipamento::orderBy('created_at', 'asc')
+            ->with('lastUser', 'local', 'tipo', 'unidade')->get();
              $unidade = 'GERAL';
         }  elseif(Auth::user()->unidade instanceof Unidade){
             $equipamentos = Equipamento::where('unidade_id', '=', Auth::user()->unidade->id)
-            ->get();
+            ->with('lastUser', 'local', 'tipo', 'unidade')->get();
             $unidade = Auth::user()->unidade->nome;
         }
         return view('equipamentos.index', ['equipamentos' => $equipamentos, 'unidade'=> $unidade]);

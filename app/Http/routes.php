@@ -26,12 +26,12 @@
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
     
+    Route::get('/', ['middleware' => 'auth',  function () {
+        return view('welcome');
+    }]);
+    
     Route::get('/home', 'HomeController@index');
     
-    Route::get('/', function () {
-        return view('welcome');
-    });
-
     //orgao
     Route::resource('orgaos', 'OrgaoController');
     //User

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
@@ -30,6 +31,8 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
+    protected $username = 'username';
+    
     /**
      * Create a new authentication controller instance.
      *
@@ -51,6 +54,7 @@ class AuthController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
+            'username' => 'required|max:10|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -63,10 +67,18 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+//        return User::create([
+//            'name' => $data['name'],
+//            'email' => $data['email'],
+//            'password' => bcrypt($data['password']),
+//        ]);
+        return NULL;
     }
+    
+    protected function getCredentials(Request $request)
+    {
+        $request['active'] = TRUE;
+        return $request->only($this->loginUsername(), 'password', 'active');
+    }
+    
 }

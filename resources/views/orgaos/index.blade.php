@@ -31,6 +31,7 @@
                                             <a class="btn btn-small btn-info pull-left " href="{{ route('orgaos.edit', $orgao->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
+                                            @if($orgao->canDelete())
                                             <form action="/orgaos/{{ $orgao->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
@@ -38,8 +39,12 @@
                                                 <button type="submit" id="delete-orgao-{{ $orgao->id }}" class="btn btn-danger btn-delete">
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
-                                                
                                             </form>
+                                             @else
+                                                <button type="button" class="btn btn-no-delete">
+                                                    <i class="fa fa-btn fa-trash"></i>Excluir
+                                                </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -62,8 +67,8 @@
                  return false;
              }
         });
-        $('.no-delete-user').on('click', function() {
-             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        $('.btn-no-delete').on('click', function() {
+             alert("Existe(m) unidade(s) associada(s) a esse registro");
         });
 });
 </script>

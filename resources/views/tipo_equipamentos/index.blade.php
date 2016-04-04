@@ -30,15 +30,19 @@
                                             <a class="btn btn-small btn-info pull-left " href="{{ route('tipo_equipamentos.edit', $tipo_equipamento->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
+                                            @if($tipo_equipamento->canDelete())
                                             <form action="/tipo_equipamentos/{{ $tipo_equipamento->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
-
                                                 <button type="submit" id="delete-tipo_equipamento-{{ $tipo_equipamento->id }}" class="btn btn-danger btn-delete">
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
-                                                
                                             </form>
+                                             @else
+                                                <button type="button" class="btn btn-no-delete">
+                                                    <i class="fa fa-btn fa-trash"></i>Excluir
+                                                </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -61,8 +65,8 @@
                  return false;
              }
         });
-        $('.no-delete-user').on('click', function() {
-             alert("O usuário possui unidade vinculada e não pode ser excluído");
+        $('.btn-no-delete').on('click', function() {
+             alert("Esse registro já foi utilizado e não pode mais ser excluído.");
         });
 });
 </script>
