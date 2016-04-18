@@ -18,7 +18,7 @@ class CreateUserProfilesTable extends Migration
             $table->string('name', 20);
         });
         
-        DB::insert('INSERT INTO user_profiles(name) VALUES (?),(?),(?) ', ['Admin', 'User', 'Report']);
+        DB::insert('INSERT INTO user_profiles(name) VALUES (?),(?)', ['Admin', 'User']);
 
     }
 

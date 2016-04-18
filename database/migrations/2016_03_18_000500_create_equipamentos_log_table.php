@@ -23,8 +23,8 @@ class CreateEquipamentosLogTable extends Migration
             $table->text('observacao')->nullable();
             $table->boolean('active')->nullable();
             $table->enum('fires', ['D','U','I'])->nullable();
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamp('created_at')->useCurrent = TRUE;
-            
         });
     }
 

@@ -34,8 +34,6 @@
                                             <a class="btn btn-small btn-info pull-left " href="{{ route('users.edit', $user->id) }} "><i class="fa fa-pencil fa-btn"></i>Editar</a>
                                         </td>
                                         <td>
-                                            @if($user->canDelete())
-                                            
                                             <form action="/users/{{ $user->id }}" method="POST" class="pull-left" >
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
@@ -43,12 +41,6 @@
                                                     <i class="fa fa-btn fa-trash"></i>Excluir
                                                 </button>
                                             </form>
-                                            
-                                            @else
-                                             <button type="button" class="btn btn-no-delete">
-                                                    <i class="fa fa-btn fa-trash"></i>Excluir
-                                                </button>
-                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -64,18 +56,13 @@
     </div>
 @endsection
 @push('scripts')
-<script>
-    $(document).ready(function(){
-        
-        $('.btn-delete').on('click', function() {
-             if(!confirm('Confirma a exclusão?')){
-                 return false;
-             }
-        });
-        $('.btn-no-delete').on('click', function() {
-             alert("O usuário já registrou equipamentos e não pode mais ser excluído");
-        });
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.btn-delete').on('click', function() {
+         if(!confirm('Confirma a exclusão?')){
+             return false;
+         }
+    });
 });
-
 </script>
 @endpush

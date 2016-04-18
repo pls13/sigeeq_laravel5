@@ -43,6 +43,8 @@ Route::group(['middleware' => ['web']], function () {
     //local equipamento
     Route::resource('local_equipamentos', 'LocalEquipamentoController');
     //equipamento
+    Route::post('status/{id}', 'EquipamentoController@storeStatus');
+    //Route::resource('status_equipamento', 'StatusEquipamentoController',['only' => ['index', 'show']]);
     Route::resource('equipamentos', 'EquipamentoController');
 
 });

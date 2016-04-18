@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Equipamento extends Model
 {
-    
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -14,6 +16,9 @@ class Equipamento extends Model
      */
     protected $fillable = ['unidade_id', 'tipo_id', 'local_id', 
         'last_user_id', 'patrimonio', 'observacao', 'active'];
+    
+    //private $status = NULL;
+    
     
     /**
      * Get the  user that perform last update
@@ -42,6 +47,13 @@ class Equipamento extends Model
     public function unidade()
     {
         return $this->belongsTo('App\Unidade');
+    }
+    /**
+     * Get the  status
+     */
+    public function status()
+    {   
+        return $this->hasOne('App\StatusEquipamento');
     }
 
 }

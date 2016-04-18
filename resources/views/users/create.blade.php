@@ -18,7 +18,6 @@
                 <!-- New Task Form -->
 
                 <form action="/users" method="POST" class="form-horizontal">
-
                 {{ csrf_field() }}
 
                 <!-- Task Name -->

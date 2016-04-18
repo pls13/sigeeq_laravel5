@@ -49,12 +49,22 @@
                                 <textarea name="observacao" id="equipamento-observacao" class="form-control" >{{ old('observacao') }}</textarea>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label for="equipamento-active" class="col-sm-3 control-label">Ativo</label>
-                            <div class="col-sm-2">
-                                {{ Form::select('active', array('1' => 'Sim', '0' => 'Não'), old('active'), array('id'=>'equipamento-active', 'class' => 'form-control')) }}
+                            <label for="equipamento-status" class="col-sm-3 control-label">Status</label>
+                                <div class="col-sm-3">
+                                    {{ Form::select('status',$e_status, old('active'), array('id'=>'equipamento-status', 'class' => 'form-control')) }}
+                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipamento-status_descricao" class="col-sm-3 control-label">Descrição Status</label>
+
+                            <div class="col-sm-6">
+                                <textarea name="status_descricao" id="equipamento-status_descricao" class="form-control" >{{ (old('status_descricao')!='')?old('status_descricao'):'Funcionando' }}</textarea>
                             </div>
                         </div>
+                        
+                        
                         <!-- Add Task Button -->
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6">

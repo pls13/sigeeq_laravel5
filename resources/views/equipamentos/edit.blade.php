@@ -16,7 +16,6 @@
 
                     <!--Form -->
                     {{ Form::model($equipamento, array('route' => array('equipamentos.update', $equipamento->id), 'method' => 'PUT', 'class'=>'form-horizontal')) }}
-                        {{ csrf_field() }}
                         <div class="form-group">
                             <label for="equipamento-unidade_id" class="col-sm-3 control-label">Unidade</label>
                             <div class="col-sm-6">
@@ -50,12 +49,7 @@
                                 <textarea name="observacao" id="equipamento-observacao" class="form-control" >{{ $equipamento->observacao }}</textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="equipamento-active" class="col-sm-3 control-label">Ativo</label>
-                            <div class="col-sm-2">
-                                {{ Form::select('active', array('1' => 'Sim', '0' => 'Não'), $equipamento->active, array('id'=>'equipamento-active', 'class' => 'form-control')) }}
-                            </div>
-                        </div>
+
                         <!-- Add Task Button -->
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-6">

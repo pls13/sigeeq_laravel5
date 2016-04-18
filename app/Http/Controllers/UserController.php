@@ -115,13 +115,20 @@ class UserController extends Controller
      */
     public function update($id, Request $request) {
         $input = $request->all();
-        $validator = validator($input, [
+        if(intval($id) !== 1){
+            $validator = validator($input, [
+                'name' => 'required|max:150',
+                'username' => 'regex:/(^[A-Za-z0-9]+$)+/|required|max:10|unique:users,username,'.$id,
+                'email' => 'required|max:150|unique:users,email,'.$id,
+                'profile_id' => 'required',
+                'active'=> 'required',
+            ]);
+        }else{
+            $validator = validator($input, [
             'name' => 'required|max:150',
-            'username' => 'regex:/(^[A-Za-z0-9]+$)+/|required|max:10|unique:users,username,'.$id,
             'email' => 'required|max:150|unique:users,email,'.$id,
-            'profile_id' => 'required',
-            'active'=> 'required',
-        ]);
+            ]);
+        }
         
         if (!$validator->fails()){
             if($input['unidade_id'] != ''){
@@ -139,14 +146,20 @@ class UserController extends Controller
         if ($validator->fails()) {
             return redirect('users/'.$id.'/edit')->withErrors($validator)->withInput();
         } else {
+            
             $user = User::findOrFail($id);
-            $user->fill($input);
+            if(intval($id) !== 1){
+                $user->fill($input);
+            }else{
+                $user->name = $input['name'];
+                $user->email = $input['email'];
+            }
             $user->save();
             $mudouUnidade = FALSE;
             if($user->unidade instanceof Unidade){
                 if($input['unidade_id'] != $user->unidade->id){
                     $mudouUnidade = TRUE;
-                    $unidade = Unidade::find($user->unidade->id);
+                    $unidade = $user->unidade;
                     $unidade->tecnico_id = NULL;
                     $unidade->save();
                 }
@@ -174,12 +187,21 @@ class UserController extends Controller
      * @return Response
      */
     public function destroy($id) {
-        $user = User::find($id);
-        $user->delete();
+        if(intval($id) !== 1){
+            $user = User::findOrFail($id);
+            $user->usename = $user->usename." #E";
+            $user->email = $user->email." #E";
+            $unidade = $user->unidade;
+            $user->save();
+            if($unidade  instanceof Unidade){
+                $unidade->tecnico_id = NULL;
+                $unidade->save();
+            }
+            $user->delete();
+        }
         // redirect
         //Session::flash('message', 'Successfully deleted!');
         return redirect('users');
     }
     
-
 }

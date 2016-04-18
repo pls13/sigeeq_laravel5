@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Equipamento;
+use App\EStatus;
+use App\StatusEquipamento;
 use App\TipoEquipamento;
 use App\LocalEquipamento;
 use App\Unidade;
@@ -30,14 +32,18 @@ class EquipamentoController extends Controller
         $equipamentos = $unidade = '';
         if (Auth::user()->profile->name == 'Admin'){
             $equipamentos = Equipamento::orderBy('created_at', 'asc')
-            ->with('lastUser', 'local', 'tipo', 'unidade')->get();
+            ->with('lastUser', 'local', 'tipo', 'unidade','status')->get();
              $unidade = 'GERAL';
         }  elseif(Auth::user()->unidade instanceof Unidade){
             $equipamentos = Equipamento::where('unidade_id', '=', Auth::user()->unidade->id)
-            ->with('lastUser', 'local', 'tipo', 'unidade')->get();
+            ->with('lastUser', 'local', 'tipo', 'unidade','status')
+            ->orderBy('created_at', 'asc')->get();
             $unidade = Auth::user()->unidade->nome;
         }
-        return view('equipamentos.index', ['equipamentos' => $equipamentos, 'unidade'=> $unidade]);
+        $e_status = EStatus::where('id','>',0)->where('active',TRUE)->orderBy('id')->get();
+
+
+        return view('equipamentos.index', ['equipamentos' => $equipamentos, 'unidade'=> $unidade, 'e_status' =>$e_status]);
     }
 
     /**
@@ -54,8 +60,9 @@ class EquipamentoController extends Controller
         }elseif(Auth::user()->unidade instanceof Unidade){
             $arrOutput['unidades'] = [Auth::user()->unidade->id => Auth::user()->unidade->nome];
         }
-        $arrOutput['locais'] = LocalEquipamento::where('active',true)->lists('nome','id');
-        $arrOutput['tipos'] = TipoEquipamento::where('active',true)->lists('nome','id');
+        $arrOutput['e_status'] = EStatus::where('id','>',0)->where('active',TRUE)->lists('nome','id');
+        $arrOutput['locais'] = LocalEquipamento::where('active',TRUE)->lists('nome','id');
+        $arrOutput['tipos'] = TipoEquipamento::where('active',TRUE)->lists('nome','id');
         $arrOutput['property_combo'] = $comboUnidade;
        return view('equipamentos.create',$arrOutput);
         
@@ -81,7 +88,8 @@ class EquipamentoController extends Controller
         $arrValidator = ['tipo_id' => 'required',
                         'local_id' => 'required',
                         'patrimonio' => 'required|max:20|unique:equipamentos',
-                        'active'=> 'required'];
+                        'status'=> 'required', 
+                        'status_descricao'=> 'required'];
         $validator = validator($request->all(), $arrValidator);
         if(!$valido){
             $validator->after(function($validator) {
@@ -92,15 +100,21 @@ class EquipamentoController extends Controller
             return redirect('equipamentos/create')->withErrors($validator)->withInput();
         } else {
             
-            Equipamento::create([
+            $insertID = Equipamento::create([
                 'unidade_id' => $unidadeId,
                 'tipo_id' => $request['tipo_id'],
                 'local_id' => $request['local_id'],
                 'last_user_id' => $user->id,
                 'patrimonio' => $request['patrimonio'],
                 'observacao'=> $request['observacao'],
-                'active'=> $request['active'],
+            ])->id;
+            StatusEquipamento::create([
+                'equipamento_id' => $insertID,
+                'user_id' => $user->id,
+                'status_id' => $request['status'],
+                'descricao' => $request['status_descricao']
             ]);
+            
             //Session::flash('message', 'Successfully created!');
             return redirect('/equipamentos');
         }
@@ -125,8 +139,8 @@ class EquipamentoController extends Controller
     public function edit($id)
     {
         $equipamento = Equipamento::find($id);
-        $locais = LocalEquipamento::where('active',true)->lists('nome','id');
-        $tipos = TipoEquipamento::where('active',true)->lists('nome','id');
+        $locais = LocalEquipamento::where('active',TRUE)->lists('nome','id');
+        $tipos = TipoEquipamento::where('active',TRUE)->lists('nome','id');
         $unidades = Unidade::orderBy('created_at','asc')->lists('nome','id');
 
         return view('equipamentos.edit', array('equipamento'=>$equipamento,
@@ -145,7 +159,6 @@ class EquipamentoController extends Controller
         $validator = validator($input, [
             'unidade_id' => 'required','tipo_id' => 'required','local_id' => 'required',
             'patrimonio' => 'required|max:20|unique:equipamentos,patrimonio,'.$id,
-            'active'=> 'required'
         ]);
         if ($validator->fails()) {
             return redirect('equipamentos/'.$id.'/edit')->withErrors($validator)->withInput();
@@ -168,11 +181,36 @@ class EquipamentoController extends Controller
      */
     public function destroy($id) {
         $equipamento = Equipamento::find($id);
+        $equipamento->patrimonio = $equipamento->patrimonio." #E";
+        $equipamento->save();
         $equipamento->delete();
 
         // redirect
         //Session::flash('message', 'Successfully deleted !');
         return redirect('equipamentos');
+    }
+    
+    
+    public function storeStatus($id, Request $request) {
+        $user = Auth::user();
+        $valido = FALSE;
+        $input = $request->all();
+        $sts = $input['status']; 
+        $sts = $input['descricao']; 
+        $arrValidator = ['status' => 'required','descricao' => 'required',];
+        $validator = validator($input, $arrValidator);
+        if ($validator->fails()) {
+            return redirect('equipamentos')->withErrors($validator)->withInput();
+        } else {
+            $sts = StatusEquipamento::findOrFail($id);
+            $sts->status_id = $request['status']; 
+            $sts->descricao = $request['descricao']; 
+            $sts->user_id = $user->id;
+            $sts->save();
+            
+            \Session::flash('flash_success', 'Status editado com sucesso');
+            return redirect('/equipamentos');
+        }
     }
 
 }

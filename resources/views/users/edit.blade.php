@@ -18,8 +18,6 @@
 
                 {{ Form::model($user, array('route' => array('users.update', $user->id), 'method' => 'PUT', 'class'=>'form-horizontal')) }}
 
-                {{ csrf_field() }}
-
                 <!-- Task Name -->
                 <div class="form-group">
                     <label for="user-name" class="col-sm-3 control-label">Nome</label>
@@ -31,7 +29,11 @@
                 <div class="form-group">
                     <label for="user-username" class="col-sm-3 control-label">Usename</label>
                     <div class="col-sm-6">
+                    @if(intval($user->id) !== 1)
                         <input type="text" name="username" id="user-username" class="form-control" value="{{ $user->username }}">
+                    @else
+                        <input type="text" readonly="readonly" name="username" id="user-username" class="form-control" value="{{ $user->username }}">
+                    @endif
                     </div>
                 </div>
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -57,14 +59,23 @@
                 <div class="form-group">
                     <label for="user-profile_id" class="col-sm-3 control-label">Perfil</label>
                     <div class="col-sm-2">
+                    @if(intval($user->id) !== 1)
                         {{ Form::select('profile_id', $profiles, $user->profile_id, array('id'=>'user-profile_id', 'class' => 'form-control')) }}
+                    @else
+                        <select class="form-control" ><option value="1">Admin</option></select>
+                    @endif
                     </div>
                 </div>                        
 
                 <div class="form-group">
                     <label for="user-active" class="col-sm-3 control-label">Ativo</label>
                     <div class="col-sm-2">
+                        @if(intval($user->id) !== 1)
                         {{ Form::select('active', array('1' => 'Sim', '0' => 'Não'), $user->active, array('id'=>'user-active', 'class' => 'form-control')) }}
+                        @else
+                        <select class="form-control" ><option value="1">Sim</option></select>
+                        @endif
+
                     </div>
                 </div>
 

@@ -1,0 +1,24 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11/04/2016, 15:22:36
+    Author     : isadora
+*/
+
+.sts_ok{
+    background-color: #BEF781 !important;
+    color:#333 !important;
+    
+}
+.sts_descarte{
+    background-color: #848484 !important;
+    color: #F2F2F2 !important;
+}
+.sts_falha{
+    background-color: #F78181 !important;
+    color:#333 !important;
+
+}

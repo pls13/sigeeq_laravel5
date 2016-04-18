@@ -40,5 +40,9 @@ class Unidade extends Model
         }
         return $this->canDelete;
     }
+   
+    public function setTecnicoId($user_id){
+        $this->tecnico_id = $user_id;
+    }
     
 }
