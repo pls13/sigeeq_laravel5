@@ -28,7 +28,11 @@
                     <tbody>
                         @foreach ($equipamentos as $equipamento)
                         <tr>
-                            <td class="table-text"><div id="patrimonio_{{ $equipamento->id }}"><i class="fa fa-btn fa-search-plus"></i>{{ $equipamento->patrimonio }}</div></td>
+                            <td class="table-text" nowrap >
+                                <a data-id="{{ $equipamento->id }}" id="detail_{{ $equipamento->id }}"  data-toggle="modal" href="#modalDetail" >
+                                    <i class="fa fa-btn fa-search-plus"></i><span id="patrimonio_{{ $equipamento->id }}">{{ $equipamento->patrimonio }}</span>
+                                </a>
+                            </td>
                             <td class="table-text"><div>{{ $equipamento->tipo->nome }}</div></td>
                             <td class="table-text"><div>{{ $equipamento->local->nome }}</div></td>
                             <td class="table-text"><div>{{ $equipamento->unidade->sigla }}</div></td>
@@ -67,7 +71,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal STATUS -->
     <div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -101,6 +105,56 @@
                     <button type="submit"id="submitStatus" class="btn btn-primary"><i class="fa fa-btn fa-check"></i>Gravar Alterações</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Details-->
+    <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modalDetail">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content form-horizontal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Detalhes do equipamento: <span id="nomeEquipamentoDetail"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="detail-patrimonio" class="col-sm-3 control-label">Patrimônio</label>
+                        <label class="col-sm-6 detail-label" id="detail-patrimonio">asd</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-tipo" class="col-sm-3 control-label">Tipo</label>
+                        <div class="col-sm-6 detail-label" id="detail-tipo">adsfdsf</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-local" class="col-sm-3 control-label">Unidade</label>
+                        <div class="col-sm-6 detail-label" id="detail-unidade">sdfsdf</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-local" class="col-sm-3 control-label">Local</label>
+                        <div class="col-sm-6 detail-label" id="detail-local">sdfsdf</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-observacao" class="col-sm-3 control-label">Observação</label>
+                        <div class="col-sm-6 detail-label" id="detail-observacao">sdfsdf</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-status" class="col-sm-3 control-label">Status</label>
+                        <div class="col-sm-6 detail-label" id="detail-status">sdfsdf</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detail-descricao" class="col-sm-3 control-label">Descrição</label>
+                        <div class="col-sm-6 detail-label" id="detail-descricao">sdfsdffsd</div>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" >Exibir histórico do Status</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" style="margin:0 auto;color:#ff0000" >Exibir histórico de edição</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
             </div>
         </div>
     </div>

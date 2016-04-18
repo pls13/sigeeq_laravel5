@@ -22,3 +22,7 @@ and open the template in the editor.
     color:#333 !important;
 
 }
+.detail-label{
+    margin-bottom: 0;
+    padding-top: 7px;
+}
