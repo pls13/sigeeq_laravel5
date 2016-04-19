@@ -12,8 +12,9 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
         
         <!-- Styles -->
+        <link rel="stylesheet" href="<?php echo e(asset('css/default.css')); ?>">
         <link rel="stylesheet" href="<?php echo e(asset('css/bootstrap.min.css')); ?>">
-        
+        <link href="<?php echo e(asset('DataTables/datatables.min.css')); ?>" rel="stylesheet" type="text/css"/>
         <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
         <?php /* <link href="<?php echo e(elixir('css/app.css')); ?>" rel="stylesheet"> */ ?>
 
@@ -49,9 +50,9 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        <?php if(Auth::check() && (Auth::user()->profile->name == 'Admin'
+                        || Auth::user()->unidade instanceof App\Unidade)): ?>                        
                         <li><a href="<?php echo e(url('/home')); ?>">Home</a></li>
-                        <?php if(Auth::user()): ?>
-                        
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Cadastro<span class="caret"></span>
@@ -59,27 +60,30 @@
                             <ul class="dropdown-menu" role="menu">
                                 <?php if(Auth::user()->profile->name == 'Admin'): ?>
                                 <li><a href="<?php echo e(url('/users')); ?>">Usuários</a></li>
-                                <li><a href="<?php echo e(url('/orgaos')); ?>">Órgãos</a></li>
+                                <li><a href="<?php echo e(url('/orgaos')); ?>">Órgãos/Secretarias</a></li>
                                 <li><a href="<?php echo e(url('/unidades')); ?>">Unidades</a></li>
                                 <?php endif; ?>
-                                <?php if(Auth::user()->profile->name == 'Admin'|| Auth::user()->profile->name == 'User'): ?>
-                                <li><a href="<?php echo e(url('/tipo_equipamentos')); ?>">Tipo Equipamento</a></li>
-                                <li><a href="<?php echo e(url('/local_equipamentos')); ?>">Local Equipamento</a></li>
-                                <li><a href="<?php echo e(url('/equipamentos')); ?>">Equipamento</a></li>
-                                <?php endif; ?>
+                                <li><a href="<?php echo e(url('/equipamentos')); ?>">Equipamentos</a></li>
+                                <li><a href="<?php echo e(url('/tipo_equipamentos')); ?>">Tipo Equipamentos</a></li>
+                                <li><a href="<?php echo e(url('/local_equipamentos')); ?>">Local Equipamentos</a></li>
                                 
                             </ul>
                         </li>
-                        
+<!--                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Relatórios<span class="caret"></span>
+                            </a>    
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Listagem Geral</a></li>
+                            </ul>
+                        </li>-->
                         <?php endif; ?>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        <?php if(Auth::guest()): ?>
-                        <li><a href="<?php echo e(url('/login')); ?>">Login</a></li>
-                        <?php else: ?>
+                        <?php if(Auth::check()): ?>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <?php echo e(Auth::user()->username); ?> <span class="caret"></span>
@@ -102,6 +106,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
         <script src="<?php echo e(asset('js/vendor/jquery.js')); ?>"></script>
         <script src="<?php echo e(asset('js/bootstrap.min.js')); ?>"></script>
+        <script src="<?php echo e(asset('DataTables/datatables.min.js')); ?>" type="text/javascript"></script>
         <?php /* <script src="<?php echo e(elixir('js/app.js')); ?>"></script> */ ?>
         <?php echo $__env->yieldContent('scripts'); ?>
 

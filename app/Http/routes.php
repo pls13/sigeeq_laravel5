@@ -23,7 +23,7 @@
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web','logQuery']], function () {
     Route::auth();
     
     Route::get('/', ['middleware' => 'auth',  function () {

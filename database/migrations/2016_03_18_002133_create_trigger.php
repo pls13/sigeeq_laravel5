@@ -21,9 +21,18 @@ class CreateTrigger extends Migration
         
         DB::unprepared("
         CREATE TRIGGER trg_update_equipamento_log AFTER UPDATE ON equipamentos
-        FOR EACH ROW BEGIN
-            INSERT INTO equipamentos_log (equipamento_id, unidade_id, tipo_id, local_id, last_user_id, patrimonio, observacao, active, fires, deleted_at)
-            VALUES(NEW.id, NEW.unidade_id, NEW.tipo_id, NEW.local_id, NEW.last_user_id, NEW.patrimonio, NEW.observacao, NEW.active, 'U', NEW.deleted_at);
+        FOR EACH ROW 
+        BEGIN
+        
+            IF OLD.unidade_id <> NEW.unidade_id OR OLD.tipo_id <> NEW.tipo_id OR OLD.local_id <> NEW.local_id 
+            OR OLD.patrimonio <> NEW.patrimonio OR OLD.observacao <> NEW.observacao 
+            OR OLD.active <> NEW.active OR OLD.deleted_at <> NEW.deleted_at THEN
+            
+                INSERT INTO equipamentos_log (equipamento_id, unidade_id, tipo_id, local_id, last_user_id, patrimonio, observacao, active, fires, deleted_at)
+                VALUES(NEW.id, NEW.unidade_id, NEW.tipo_id, NEW.local_id, NEW.last_user_id, NEW.patrimonio, NEW.observacao, NEW.active, 'U', NEW.deleted_at);
+                
+            END IF;
+        
         END;
         ");
         

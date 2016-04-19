@@ -9,15 +9,15 @@
                         <?php echo csrf_field(); ?>
 
 
-                        <div class="form-group<?php echo e($errors->has('email') ? ' has-error' : ''); ?>">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
+                        <div class="form-group<?php echo e($errors->has('username') ? ' has-error' : ''); ?>">
+                            <label class="col-md-4 control-label">Username</label>
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>">
+                                <input id="username" type="text" class="form-control" name="username" value="<?php echo e(old('username')); ?>">
 
-                                <?php if($errors->has('email')): ?>
+                                <?php if($errors->has('username')): ?>
                                     <span class="help-block">
-                                        <strong><?php echo e($errors->first('email')); ?></strong>
+                                        <strong><?php echo e($errors->first('username')); ?></strong>
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -63,5 +63,12 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
+<script>
+    $(document).ready(function(){
+        $('#username').focus();
+    });
+</script>
+<?php $__env->appendSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

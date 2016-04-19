@@ -30,7 +30,7 @@ class EquipamentoController extends Controller
      */
     public function index() {
         $equipamentos = $unidade = '';
-        if (Auth::user()->profile->name == 'Admin'){
+        if (Auth::user()->profile->name === 'Admin'){
             $equipamentos = Equipamento::orderBy('created_at', 'asc')
             ->with('lastUser', 'local', 'tipo', 'unidade','status')->get();
              $unidade = 'GERAL';
@@ -128,6 +128,10 @@ class EquipamentoController extends Controller
      */
     public function show($id) {
         //
+        $equipamento = Equipamento::findOrFail($id);
+        $stsLog = $equipamento->statusLog()->with('user','status')->get();
+        $equipLog = $equipamento->equipamentoLogs()->with('lastUser','unidade','local','tipo')->get();
+        return view('equipamentos.show',['equipamento'=> $equipamento, 'stsLog' => $stsLog, 'equipLog'=> $equipLog]);
     }
 
     /**

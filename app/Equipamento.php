@@ -55,5 +55,19 @@ class Equipamento extends Model
     {   
         return $this->hasOne('App\StatusEquipamento');
     }
+    /**
+     * Get the  status log
+     */
+    public function statusLog()
+    {   
+        return $this->hasMany('App\StatusEquipamentoLog');
+    }
+    /**
+     * Get the  status log
+     */
+    public function equipamentoLogs()
+    {   
+        return $this->hasMany('App\EquipamentoLog');
+    }
 
 }
