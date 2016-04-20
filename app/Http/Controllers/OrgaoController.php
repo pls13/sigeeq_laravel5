@@ -25,7 +25,7 @@ class OrgaoController extends Controller {
     public function index() {
         
         return view('orgaos.index', [
-            'orgaos' => Orgao::orderBy('created_at', 'asc')->get(),
+            'orgaos' => Orgao::orderBy('created_at', 'asc')->with('unidades')->get(),
         ]);
     }
 

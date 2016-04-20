@@ -25,7 +25,8 @@ class Orgao extends Model
         
     public function canDelete() {
         if(is_null($this->canDelete)){
-            $this->canDelete = ($this->unidades()->count()==0);
+            $x = count($this->unidades);
+            $this->canDelete = (count($this->unidades)==0);
         }
         return $this->canDelete;
     }

@@ -40,7 +40,8 @@ class EquipamentoController extends Controller
             ->orderBy('created_at', 'asc')->get();
             $unidade = Auth::user()->unidade->nome;
         }
-        $e_status = EStatus::where('id','>',0)->where('active',TRUE)->orderBy('id')->get();
+        $e_statusT = EStatus::where('id','>',0)->where('active',TRUE)->orderBy('id')->get();
+        $e_status = $e_statusT->getDictionary();
 
 
         return view('equipamentos.index', ['equipamentos' => $equipamentos, 'unidade'=> $unidade, 'e_status' =>$e_status]);
