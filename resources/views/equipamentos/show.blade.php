@@ -93,11 +93,11 @@
                                         @foreach ($equipLog as $equip)
                                             <tr>
                                                 <td class="table-text"><div>{{ $equip->patrimonio }}</div></td>
-                                                <td class="table-text"><div>{{ $equip->tipo->nome }}</div></td>
-                                                <td class="table-text"><div>{{ $equip->unidade->sigla }}</div></td>
-                                                <td class="table-text"><div>{{ $equip->local->nome }}</div></td>
+                                                <td class="table-text"><div>{{ ($equip->tipo instanceof App\TipoEquipamento)?$equip->tipo->nome:'N/D' }}</div></td>
+                                                <td class="table-text"><div>{{ ($equip->unidade instanceof App\Unidade)?$equip->unidade->sigla:'N/D' }}</div></td>
+                                                <td class="table-text"><div>{{ ($equip->local instanceof App\LocalEquipamento)?$equip->local->nome:'N/D' }}</div></td>
                                                 <td class="table-text"><div>{{ $equip->observacao }}</div></td>
-                                                <td class="table-text"><div>{{ $equip->lastUser->name }}</div></td>
+                                                <td class="table-text"><div>{{ ($equip->lastUser instanceof App\User)?$equip->lastUser->name:'removido' }}</div></td>
                                                 <td class="table-text"><div>{{ $equip->created_at->format('d/m/Y') }}</div></td>
                                             </tr>
                                         @endforeach

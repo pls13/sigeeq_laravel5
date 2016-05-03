@@ -36,7 +36,7 @@
                             <td class="table-text"><div>{{ $equipamento->tipo->nome }}</div></td>
                             <td class="table-text"><div>{{ $equipamento->local->nome }}</div></td>
                             <td class="table-text"><div>{{ $equipamento->unidade->sigla }}</div></td>
-                            <td nowrap class="table-text {{ $e_status[$equipamento->status->status_id]->html_class }}">
+                            <td class="table-text {{ $e_status[$equipamento->status->status_id]->html_class }}">
                                 <div>
                                     <a data-id="{{ $equipamento->status->id }}" id="linkStatus_{{ $equipamento->id }}"  data-toggle="modal" href="#modalStatus"  class="linkStatus {{ $e_status[$equipamento->status->status_id]->html_class }}">
                                         <i class="fa fa-pencil fa-btn"></i><span id="lbStatus_{{ $equipamento->id }}">{{ $e_status[$equipamento->status->status_id]->nome }}</span>
